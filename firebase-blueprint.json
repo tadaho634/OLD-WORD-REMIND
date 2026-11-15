@@ -1,0 +1,251 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated learner profile and cumulative classical Japanese mastery summary.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the learner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Learner display name.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Learner email address (owner-private).",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "totalAnswered": {
+          "type": "integer",
+          "description": "Total number of quiz responses recorded."
+        },
+        "totalCorrect": {
+          "type": "integer",
+          "description": "Total number of correct responses recorded."
+        },
+        "currentStreak": {
+          "type": "integer",
+          "description": "Current consecutive correct answers."
+        },
+        "bestStreak": {
+          "type": "integer",
+          "description": "Highest consecutive correct answers achieved."
+        },
+        "completedSessions": {
+          "type": "array",
+          "description": "List of completed session IDs (max 10)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of profile creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last profile update."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "totalAnswered",
+        "totalCorrect",
+        "currentStreak",
+        "bestStreak",
+        "completedSessions",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WordProgress": {
+      "title": "WordProgress",
+      "description": "Per-word mastery level, mistake counter, and confusion history for a single learner.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "wordId": {
+          "type": "string",
+          "description": "Classical word identifier (w41 through w80).",
+          "minLength": 3,
+          "maxLength": 10,
+          "pattern": "^w(4[1-9]|[5-7][0-9]|80)$"
+        },
+        "wordNumber": {
+          "type": "integer",
+          "description": "Print word number (41 to 80)."
+        },
+        "masteryLevel": {
+          "type": "integer",
+          "description": "Mastery level from 0 (unseen) to 5 (rock-solid)."
+        },
+        "correctCount": {
+          "type": "integer",
+          "description": "Cumulative correct answers for this word."
+        },
+        "wrongCount": {
+          "type": "integer",
+          "description": "Cumulative wrong answers for this word."
+        },
+        "consecutiveCorrect": {
+          "type": "integer",
+          "description": "Current consecutive correct answers for this word."
+        },
+        "isWeak": {
+          "type": "boolean",
+          "description": "Whether the word is currently flagged as weak due to mistakes."
+        },
+        "isPinned": {
+          "type": "boolean",
+          "description": "Whether the learner manually pinned this word for review."
+        },
+        "lastConfusedMeaning": {
+          "type": "string",
+          "description": "The incorrect meaning option last chosen by the learner.",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        "lastResult": {
+          "type": "string",
+          "enum": ["correct", "wrong", "unseen"],
+          "description": "Most recent quiz outcome for this word.",
+          "minLength": 5,
+          "maxLength": 10
+        },
+        "lastStudiedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the most recent study attempt."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last document update."
+        }
+      },
+      "required": [
+        "userId",
+        "wordId",
+        "wordNumber",
+        "masteryLevel",
+        "correctCount",
+        "wrongCount",
+        "consecutiveCorrect",
+        "isWeak",
+        "isPinned",
+        "lastConfusedMeaning",
+        "lastResult",
+        "lastStudiedAt",
+        "updatedAt"
+      ]
+    },
+    "StudySessionLog": {
+      "title": "StudySessionLog",
+      "description": "Immutable record of a completed learning or exam session.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "Identifier of the session unit.",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sessionTitle": {
+          "type": "string",
+          "description": "Display title of the completed session.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["standard", "weakness", "exam"],
+          "description": "Session mode.",
+          "minLength": 4,
+          "maxLength": 16
+        },
+        "totalQuestions": {
+          "type": "integer",
+          "description": "Total distinct words in the session."
+        },
+        "firstTryCorrect": {
+          "type": "integer",
+          "description": "Words answered correctly on first attempt."
+        },
+        "requeuedCount": {
+          "type": "integer",
+          "description": "Total re-queued repetitions required to clear mistakes."
+        },
+        "durationSeconds": {
+          "type": "integer",
+          "description": "Total active session duration in seconds."
+        },
+        "mistakenWordIds": {
+          "type": "array",
+          "description": "IDs of words missed during this session (max 40)."
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when session completed."
+        }
+      },
+      "required": [
+        "userId",
+        "sessionId",
+        "sessionTitle",
+        "mode",
+        "totalQuestions",
+        "firstTryCorrect",
+        "requeuedCount",
+        "durationSeconds",
+        "mistakenWordIds",
+        "completedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Owner-private user profile and cumulative study summary."
+    },
+    "/users/{userId}/wordProgress/{wordId}": {
+      "schema": {
+        "$ref": "#/entities/WordProgress"
+      },
+      "description": "Per-word mastery and mistake tracking subcollection scoped to the owner user."
+    },
+    "/users/{userId}/studySessions/{sessionLogId}": {
+      "schema": {
+        "$ref": "#/entities/StudySessionLog"
+      },
+      "description": "Completed session logs scoped to the owner user."
+    }
+  }
+}

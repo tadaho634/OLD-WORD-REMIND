@@ -1,0 +1,6 @@
+{
+  "name": "古文単語 四十選（No.41–80）",
+  "description": "『新国語便覧』41〜80番をセッション区切りと間違いゼロ再出題ループで完全定着させる古文単語学習アプリ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
